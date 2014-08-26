@@ -1,6 +1,9 @@
 #ifndef QOTUSUN_H_
 #define QOTUSUN_H_
 
+
+// 2014.8.23 change the pinWrite function
+
 #include <avr/io.h>
 #include <stdbool.h>
 #include <util/delay.h>
@@ -173,7 +176,9 @@ static inline void pinWrite(unsigned char pin,unsigned char value)
     struct IOStruct* _io=0;
     get_io_registers(_io,pin);
 
-    value ? (*(_io->portRegister) |= _io->bitmask) : (*(_io->portRegister) &= ~(_io->bitmask));
+    //value ? (*(_io->portRegister) |= _io->bitmask) : (*(_io->portRegister) &= ~(_io->bitmask));// add the TOGGLE action
+
+    value ? ( (--value) ? (*(_io->pinRegister) |= _io->bitmask) : (*(_io->portRegister) |= _io->bitmask) ) : (*(_io->portRegister) &= ~(_io->bitmask));
 }
 
 #endif // QOTUSUN_H_
